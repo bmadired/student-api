@@ -14,14 +14,16 @@
 # ENVIRONMENT
 #--------------------------------------------------------------------
 
-CI_ENVIRONMENT = development
+CI_ENVIRONMENT = production
 
-database.default.hostname = localhost
-database.default.database = student_db
-database.default.username = root
-database.default.password =
-database.default.DBDriver = MySQLi
-database.default.port = 3306
+database.default.hostname = dpg-d3r8otbuibrs73e54rr0-a.oregon-postgres.render.com
+database.default.database = student_api_db
+database.default.username = student_api_db_user
+database.default.password = erlYaGildYajRYj8JOQ7I8Zy7VT18Uii
+database.default.DBDriver = Postgre
+database.default.port = 5432
+database.default.DSN = ''
+
 
 #--------------------------------------------------------------------
 # APP

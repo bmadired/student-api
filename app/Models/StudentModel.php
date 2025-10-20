@@ -9,10 +9,13 @@ class StudentModel extends Model
     protected $primaryKey = 'id';
 
     // Fields allowed for insert/update
-    protected $allowedFields = ['name', 'email', 'course', 'created_at'];
+    protected $allowedFields = ['name', 'date_of_birth', 'intake_class', 'department_id'];
 
-    // Automatically manage timestamps if desired
-    protected $useTimestamps = true;
+    // Optional timestamps (PostgreSQL compatible)
+    protected $useTimestamps = false;  // set true only if you have created_at column
     protected $createdField  = 'created_at';
-    protected $updatedField  = '';
+    protected $updatedField  = 'updated_at';
+
+    // Optional for debugging/logging
+    protected $returnType    = 'array';
 }
