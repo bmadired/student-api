@@ -1,28 +1,25 @@
 FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y \
-    git unzip libpq-dev libicu-dev \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install intl pdo pdo_pgsql pgsql
+# Enable required PHP extensions
+RUN docker-php-ext-install pdo pdo_pgsql pgsql intl
 
+# Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Set working directory to the public folder, not repo root
+# Set the working directory
 WORKDIR /var/www/html
 
-# Copy everything
-COPY . .
+# Copy the project into the container
+COPY . /var/www/html
 
-# Move CodeIgniter public files to Apache root
-RUN rm -rf /var/www/html/index.html || true
-RUN cp -r ./public/* /var/www/html/
+# Change Apache root to public/
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-RUN composer install --no-interaction --optimize-autoloader
+# Fix permissions
+RUN chown -R www-data:www-data /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html/writable
-
+# Expose port
 EXPOSE 80
 
+# Start Apache
 CMD ["apache2-foreground"]
