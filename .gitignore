@@ -1,0 +1,43 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment and sensitive files
+.env
+*.env
+.env.*
+
+# IDE and editor configs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific junk
+__MACOSX/
+*.bak
+*.tmp
+*.log
+
+# Vendor dependencies (optional to ignore if Render will install via Composer)
+vendor/
+
+# Composer cache
+composer.lock
+
+# Node / frontend build files (if added later)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# PHPStorm / VSCode metadata
+*.iml
+.vscode/
+.idea/
+
+# Writable and cache directories (exclude logs if sensitive)
+writable/cache/
+writable/logs/
+writable/session/
+writable/uploads/
