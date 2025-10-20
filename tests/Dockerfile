@@ -3,8 +3,9 @@ FROM php:8.2-apache
 
 # Install required system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
-    git unzip libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+    git unzip libpq-dev libicu-dev \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl pdo pdo_pgsql pgsql
 
 # Enable Apache mod_rewrite for CodeIgniter
 RUN a2enmod rewrite
@@ -18,14 +19,13 @@ WORKDIR /var/www/html
 # Copy project files into container
 COPY . .
 
-# Install PHP dependencies
-RUN composer install
-
+# Install PHP dependencies (now intl is available)
+RUN composer install --no-interaction --optimize-autoloader
 
 # Set permissions for writable directory
 RUN chown -R www-data:www-data /var/www/html/writable
 
-# Expose port 80 for web server
+# Expose port 80
 EXPOSE 80
 
 # Start Apache
