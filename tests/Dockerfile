@@ -19,7 +19,8 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install
+
 
 # Set permissions for writable directory
 RUN chown -R www-data:www-data /var/www/html/writable
