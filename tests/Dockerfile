@@ -1,21 +1,15 @@
-# Use official PHP 8 image
 FROM php:8.2-apache
 
-# Enable extensions
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN docker-php-ext-install pdo pdo_mysql mysqli
 
-# Copy project
+RUN a2enmod rewrite
+
 COPY . /var/www/html/
 
-# Enable Apache mod_rewrite for CodeIgniter
-RUN a2enmod rewrite
-RUN echo "<Directory /var/www/html/> \
-    AllowOverride All \
-    </Directory>" >> /etc/apache2/apache2.conf
+WORKDIR /var/www/html/
 
-# Expose Render's port
-EXPOSE 10000
-ENV PORT=10000
+RUN chown -R www-data:www-data /var/www/html
 
-# Start Apache
+EXPOSE 80
+
 CMD ["apache2-foreground"]
