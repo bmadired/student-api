@@ -1,32 +1,28 @@
-# Use official PHP image with Apache
 FROM php:8.2-apache
 
-# Install required system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     git unzip libpq-dev libicu-dev \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl pdo pdo_pgsql pgsql
 
-# Enable Apache mod_rewrite for CodeIgniter
 RUN a2enmod rewrite
 
-# Install Composer globally
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# Set working directory to the public folder, not repo root
 WORKDIR /var/www/html
 
-# Copy project files into container
+# Copy everything
 COPY . .
 
-# Install PHP dependencies (now intl is available)
+# Move CodeIgniter public files to Apache root
+RUN rm -rf /var/www/html/index.html || true
+RUN cp -r ./public/* /var/www/html/
+
 RUN composer install --no-interaction --optimize-autoloader
 
-# Set permissions for writable directory
 RUN chown -R www-data:www-data /var/www/html/writable
 
-# Expose port 80
 EXPOSE 80
 
-# Start Apache
 CMD ["apache2-foreground"]
