@@ -77,70 +77,88 @@
   <pre id="response"></pre>
 
 <script>
-  // ✅ Use your Render base URL for public use
+  // ✅ Use Render URL so anyone can test globally
   const baseUrl = "https://student-api-whz1.onrender.com/students";
 
+  const responseBox = document.getElementById("response");
+
+  // Helper: Display results or errors
+  function show(data) {
+    responseBox.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+  }
+
+  // ---------------- GET ALL ----------------
   async function getAll() {
     try {
       const res = await fetch(baseUrl);
-      document.getElementById("response").textContent = await res.text();
+      const data = await res.json();
+      show(data);
     } catch (err) {
-      document.getElementById("response").textContent = "❌ Error: " + err;
+      show("❌ Error: " + err.message);
     }
   }
 
+  // ---------------- GET BY ID ----------------
   async function getById() {
     const id = document.getElementById("studentId").value;
-    if (!id) return alert("Please enter an ID");
+    if (!id) return alert("Please enter ID");
     try {
       const res = await fetch(`${baseUrl}/${id}`);
-      document.getElementById("response").textContent = await res.text();
+      const data = await res.json();
+      show(data);
     } catch (err) {
-      document.getElementById("response").textContent = "❌ Error: " + err;
+      show("❌ Error: " + err.message);
     }
   }
 
+  // ---------------- POST ----------------
   async function createStudent() {
     try {
       const body = document.getElementById("jsonBody").value;
       const res = await fetch(baseUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: body,
+        body,
       });
-      document.getElementById("response").textContent = await res.text();
+      const data = await res.json();
+      show(data);
     } catch (err) {
-      document.getElementById("response").textContent = "❌ Error: " + err;
+      show("❌ Error: " + err.message);
     }
   }
 
+  // ---------------- PUT ----------------
   async function updateStudent() {
     const id = document.getElementById("studentId").value;
-    if (!id) return alert("Please enter an ID");
+    if (!id) return alert("Enter Student ID to update");
     try {
       const body = document.getElementById("jsonBody").value;
       const res = await fetch(`${baseUrl}/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: body,
+        body,
       });
-      document.getElementById("response").textContent = await res.text();
+      const data = await res.json();
+      show(data);
     } catch (err) {
-      document.getElementById("response").textContent = "❌ Error: " + err;
+      show("❌ Error: " + err.message);
     }
   }
 
+  // ---------------- DELETE ----------------
   async function deleteStudent() {
     const id = document.getElementById("studentId").value;
-    if (!id) return alert("Please enter an ID");
+    if (!id) return alert("Enter Student ID to delete");
     try {
       const res = await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
-      document.getElementById("response").textContent = await res.text();
+      const data = await res.json();
+      show(data);
     } catch (err) {
-      document.getElementById("response").textContent = "❌ Error: " + err;
+      show("❌ Error: " + err.message);
     }
   }
 </script>
+
 
 </body>
 </html>
