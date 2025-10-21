@@ -12,7 +12,7 @@ $routes->get('/', 'StudentController::index');
 // ✅ RESTful routes
 $routes->resource('students', ['controller' => 'StudentController']);
 
-// ✅ Allow preflight CORS requests (very important!)
+// ✅ Handle CORS preflight OPTIONS requests globally
 $routes->options('(:any)', function() {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -22,6 +22,6 @@ $routes->options('(:any)', function() {
     exit;
 });
 
-// Optional extra pages
+// Optional UI routes (if you added any)
 $routes->get('add-student', 'PageController::addStudentForm');
 $routes->get('api-tester', 'TesterController::index');
