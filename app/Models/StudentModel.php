@@ -5,17 +5,31 @@ use CodeIgniter\Model;
 
 class StudentModel extends Model
 {
-    protected $table      = 'students';
-    protected $primaryKey = 'id';
+    protected $table            = 'students';
+    protected $primaryKey       = 'id';
 
-    // Fields allowed for insert/update
-    protected $allowedFields = ['name', 'date_of_birth', 'intake_class', 'department_id'];
+    // ✅ Automatically allow CodeIgniter to update these columns
+    protected $allowedFields    = ['name', 'email', 'course'];
 
-    // Optional timestamps (PostgreSQL compatible)
-    protected $useTimestamps = false;  // set true only if you have created_at column
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    // ✅ Enable data return as associative array
+    protected $returnType       = 'array';
 
-    // Optional for debugging/logging
-    protected $returnType    = 'array';
+    // ✅ Optional: automatically use created_at/updated_at if your DB table supports them
+    protected $useTimestamps    = false; // change to true if you have these columns
+
+    // ✅ Optional: Validation rules for better data integrity
+    protected $validationRules  = [
+        'name'  => 'required|min_length[3]|max_length[50]',
+        'email' => 'required|valid_email',
+        'course'=> 'required|min_length[2]|max_length[100]',
+    ];
+
+    protected $validationMessages = [
+        'email' => [
+            'required'    => 'Email is required.',
+            'valid_email' => 'Please enter a valid email address.'
+        ]
+    ];
+
+    protected $skipValidation = false;
 }
