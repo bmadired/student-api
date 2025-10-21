@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filters;
 
 use CodeIgniter\HTTP\RequestInterface;
@@ -11,22 +12,25 @@ class CorsFilter implements FilterInterface
     {
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
-        // Handle OPTIONS (preflight) request immediately
-        if ($request->getMethod(true) === 'OPTIONS') {
-            // Return an empty 200 OK response
-            http_response_code(200);
+        // ✅ Stop preflight requests immediately
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            $response = service('response');
+            $response->setStatusCode(200);
+            $response->setHeader('Access-Control-Allow-Origin', '*');
+            $response->setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+            $response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+            $response->send();
             exit;
         }
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        // Add headers after response too
         $response->setHeader('Access-Control-Allow-Origin', '*');
         $response->setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        $response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
+        $response->setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
         return $response;
     }
 }
