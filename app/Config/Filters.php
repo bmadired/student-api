@@ -17,11 +17,16 @@ class Filters extends BaseFilters
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
-        'cors'          => \App\Filters\CorsFilter::class, // custom filter
+        'cors'          => \App\Filters\CorsFilter::class, // ✅ our custom filter
+    ];
+
+    public array $required = [
+        'before' => [], // 🚫 no forcehttps here
+        'after'  => [],
     ];
 
     public array $globals = [
-        'before' => ['cors'],   // ✅ apply globally
+        'before' => ['cors'], // ✅ apply CORS globally
         'after'  => ['cors', 'toolbar'],
     ];
 
