@@ -11,25 +11,17 @@ use CodeIgniter\Filters\SecureHeaders;
 
 class Filters extends BaseFilters
 {
-    // ✅ Define all aliases
     public array $aliases = [
         'csrf'          => CSRF::class,
         'toolbar'       => DebugToolbar::class,
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
-        'cors'          => \App\Filters\CorsFilter::class, // custom CORS filter
+        'cors'          => \App\Filters\CorsFilter::class, // custom filter
     ];
 
-    // ✅ No “forcehttps” here
-    public array $required = [
-        'before' => [],
-        'after'  => [],
-    ];
-
-    // ✅ Apply CORS globally
     public array $globals = [
-        'before' => ['cors'],
+        'before' => ['cors'],   // ✅ apply globally
         'after'  => ['cors', 'toolbar'],
     ];
 
