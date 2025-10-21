@@ -34,7 +34,7 @@
       padding: 8px 16px;
       border-radius: 6px;
       cursor: pointer;
-      margin-right: 5px;
+      margin: 4px 2px;
     }
     button:hover {
       background: #0056b3;
@@ -47,6 +47,8 @@
       white-space: pre-wrap;
       word-wrap: break-word;
     }
+    .success { border-left: 5px solid #28a745; }
+    .error { border-left: 5px solid #dc3545; }
   </style>
 </head>
 <body>
@@ -57,13 +59,11 @@
   <input type="number" id="studentId" placeholder="Enter ID if needed" />
 
   <label>Request Body (JSON):</label>
-  <textarea id="jsonBody" rows="6">
-{
+  <textarea id="jsonBody" rows="6">{
   "name": "Bhavana Reddy",
   "email": "bhavana@example.com",
   "course": "Data Analytics"
-}
-  </textarea>
+}</textarea>
 
   <div>
     <button onclick="getAll()">GET All</button>
@@ -74,31 +74,31 @@
   </div>
 
   <h3>Response:</h3>
-  <pre id="response"></pre>
+  <pre id="response">Click a button to test the API.</pre>
 
 <script>
-  // ✅ Use Render URL so anyone can test globally
+  // ✅ Global API URL (Render backend)
   const baseUrl = "https://student-api-whz1.onrender.com/students";
-
   const responseBox = document.getElementById("response");
 
-  // Helper: Display results or errors
-  function show(data) {
+  // Display helper
+  function show(data, ok = true) {
+    responseBox.className = ok ? "success" : "error";
     responseBox.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
   }
 
-  // ---------------- GET ALL ----------------
+  // --------------- GET ALL ---------------
   async function getAll() {
     try {
       const res = await fetch(baseUrl);
       const data = await res.json();
       show(data);
     } catch (err) {
-      show("❌ Error: " + err.message);
+      show("❌ Error: " + err.message, false);
     }
   }
 
-  // ---------------- GET BY ID ----------------
+  // --------------- GET BY ID ---------------
   async function getById() {
     const id = document.getElementById("studentId").value;
     if (!id) return alert("Please enter ID");
@@ -107,11 +107,11 @@
       const data = await res.json();
       show(data);
     } catch (err) {
-      show("❌ Error: " + err.message);
+      show("❌ Error: " + err.message, false);
     }
   }
 
-  // ---------------- POST ----------------
+  // --------------- POST (CREATE) ---------------
   async function createStudent() {
     try {
       const body = document.getElementById("jsonBody").value;
@@ -120,14 +120,14 @@
         headers: { "Content-Type": "application/json" },
         body,
       });
-      const data = await res.json();
-      show(data);
+      const text = await res.text();
+      try { show(JSON.parse(text)); } catch { show(text); }
     } catch (err) {
-      show("❌ Error: " + err.message);
+      show("❌ Error: " + err.message, false);
     }
   }
 
-  // ---------------- PUT ----------------
+  // --------------- PUT (UPDATE) ---------------
   async function updateStudent() {
     const id = document.getElementById("studentId").value;
     if (!id) return alert("Enter Student ID to update");
@@ -138,27 +138,26 @@
         headers: { "Content-Type": "application/json" },
         body,
       });
-      const data = await res.json();
-      show(data);
+      const text = await res.text();
+      try { show(JSON.parse(text)); } catch { show(text); }
     } catch (err) {
-      show("❌ Error: " + err.message);
+      show("❌ Error: " + err.message, false);
     }
   }
 
-  // ---------------- DELETE ----------------
+  // --------------- DELETE ---------------
   async function deleteStudent() {
     const id = document.getElementById("studentId").value;
     if (!id) return alert("Enter Student ID to delete");
     try {
       const res = await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
-      const data = await res.json();
-      show(data);
+      const text = await res.text();
+      try { show(JSON.parse(text)); } catch { show(text); }
     } catch (err) {
-      show("❌ Error: " + err.message);
+      show("❌ Error: " + err.message, false);
     }
   }
 </script>
-
 
 </body>
 </html>
