@@ -13,16 +13,23 @@
 #--------------------------------------------------------------------
 # ENVIRONMENT
 #--------------------------------------------------------------------
-
 CI_ENVIRONMENT = production
 
 database.default.hostname = dpg-d3r8otbuibrs73e54rr0-a.oregon-postgres.render.com
 database.default.database = student_api_db
 database.default.username = student_api_db_user
-database.default.password = erlYaGildYajRYj8JOQ7I8Zy7VT18Uii
+database.default.password = erlYaGildYaJRVj8J0Q7I8zy7VTI8Uii
 database.default.DBDriver = Postgre
 database.default.port = 5432
-database.default.DSN = ''
+database.default.DSN = 
+database.default.charset = utf8
+database.default.DBPrefix =
+database.default.pConnect = false
+database.default.DBDebug = true
+database.default.compress = false
+database.default.strictOn = false
+database.default.failover = []
+database.default.saveQueries = true
 
 
 #--------------------------------------------------------------------
